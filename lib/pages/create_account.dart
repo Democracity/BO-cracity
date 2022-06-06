@@ -1,12 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import '../services/User.dart';
 
-class CreateAccount extends StatelessWidget {
+class CreateAccount extends StatefulWidget {
   const CreateAccount({Key? key}) : super(key: key);
+
+  @override
+  State<CreateAccount> createState() => _CreateAccountState();
+}
+
+
+Future<User?> createAccount(String mail, String username, String password, String role)  async {
+  var response = await http.post(Uri.http('localhost:3000', 'user'), body: {
+    "mail": mail,
+    "username": username,
+    "password": password,
+    "role": role,
+  });
+  var data = response.body;
+  print(data);
+
+  if (response.statusCode == 200){
+    String responseString = response.body;
+    userFromJson(responseString);
+  }
+  else {
+    return null;
+  }
+}
+
+class _CreateAccountState extends State<CreateAccount> {
+
+  late User _userModel;
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController mailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
 
   @override
   Widget build(BuildContext context) {
     return Container(
-
       decoration: BoxDecoration(
           gradient: LinearGradient(
               colors: [
@@ -38,14 +71,15 @@ class CreateAccount extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left:8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Email',
                             icon: Icon(Icons.email_outlined)
                         ),
+                        controller: mailController,
                       ),
                     ),
                   ),
@@ -58,14 +92,15 @@ class CreateAccount extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left:8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Username',
                             icon: Icon(Icons.account_circle_rounded)
                         ),
+                        controller: usernameController,
                       ),
                     ),
                   ),
@@ -78,14 +113,15 @@ class CreateAccount extends StatelessWidget {
                         color: Colors.black.withAlpha(40),
                         borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left:8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
                             icon: Icon(Icons.lock_open)
                         ),
+                        controller: passwordController,
                       ),
                     ),
                   ),
@@ -97,9 +133,18 @@ class CreateAccount extends StatelessWidget {
                     decoration: const BoxDecoration(
                         color: Colors.pink
                     ),
-                    child: FlatButton(
-                      onPressed: ()async{
+                    child: ElevatedButton(
+                      onPressed: () async{
+                          String mail = mailController.text;
+                          String username = usernameController.text;
+                          String password = passwordController.text;
+                          String role = "2";
 
+                          User? data = await createAccount(mail, username, password, role);
+
+                          setState((){
+                            _userModel = data!;
+                          });
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical:4),
@@ -110,6 +155,9 @@ class CreateAccount extends StatelessWidget {
                             Text("CREATE ACCOUNT"),
                           ],
                         ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.pink,
                       ),
                     ),
                   ),
@@ -126,7 +174,7 @@ class CreateAccount extends StatelessWidget {
   }
 }
 
-void _goToCreateAccount(BuildContext context) {
+void _goToLogin(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (BuildContext context) => const CreateAccount(),
