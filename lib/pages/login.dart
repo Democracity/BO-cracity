@@ -1,4 +1,5 @@
 import 'package:bo_cracity/pages/create_account.dart';
+import 'package:bo_cracity/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:bo_cracity/pages/create_account.dart';
 
@@ -85,7 +86,9 @@ class Login extends StatelessWidget {
                   child: Container(
                     decoration: const BoxDecoration(color: Colors.pink),
                     child: ElevatedButton(
-                      onPressed: () async {},
+                      onPressed: () async {
+                        _goToDashboard(context);
+                      },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
                         child: Row(
@@ -132,3 +135,12 @@ void _goToCreateAccount(BuildContext context) {
     ),
   );
 }
+
+void _goToDashboard(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (BuildContext context) => const Dashboard(),
+    ),
+  );
+}
+
