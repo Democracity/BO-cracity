@@ -1,10 +1,47 @@
+import 'dart:convert';
+
 import 'package:bo_cracity/pages/create_account.dart';
 import 'package:bo_cracity/pages/dashboard.dart';
 import 'package:flutter/material.dart';
 import 'package:bo_cracity/pages/create_account.dart';
+import 'package:http/http.dart' as http;
 
-class Login extends StatelessWidget {
+import '../services/user.dart';
+
+
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+
+Future<bool> login(String username, String password) async {
+  final http.Response response = await http.post(
+    (Uri.parse('https://democracity-api.herokuapp.com/login')),
+    headers: <String, String>{
+      'Content-Type': 'application/json',
+    },
+    body: jsonEncode(<String, String>{
+      'username': username,
+      'password': password
+    }),
+  );
+  var data = response.body;
+  print(data);
+
+  return response.statusCode == 200;
+
+}
+
+
+
+class _LoginState extends State<Login> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +73,15 @@ class Login extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Email',
                             icon: Icon(Icons.email_outlined)),
+                        controller: usernameController,
+
                       ),
                     ),
                   ),
@@ -57,13 +96,15 @@ class Login extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
+                    child:  Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
                             icon: Icon(Icons.lock_open)),
+                        controller: passwordController,
+
                       ),
                     ),
                   ),
@@ -87,7 +128,26 @@ class Login extends StatelessWidget {
                     decoration: const BoxDecoration(color: Colors.pink),
                     child: ElevatedButton(
                       onPressed: () async {
-                        _goToDashboard(context);
+
+                        String username = usernameController.text;
+                        String password = passwordController.text;
+                        print("HELLO");
+                        bool data =
+                        await login(username, password);
+                        print("HELOOOOOOOOO");
+                        print (await login(username, password));
+
+                        if(data){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Utilisateur connecté"))
+                        );
+                          _goToDashboard(context);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Utilisateur non connecté"))
+                          );
+                        }
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
