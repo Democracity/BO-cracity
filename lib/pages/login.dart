@@ -135,13 +135,13 @@ class _LoginState extends State<Login> {
                         bool data =
                         await login(username, password);
                         print("HELOOOOOOOOO");
-                        print (await login(username, password));
+                        //print (await login(username, password));
 
                         if(data){
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Utilisateur connecté"))
                         );
-                          _goToDashboard(context);
+                         _goToDashboard(context, username);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text("Utilisateur non connecté"))
@@ -186,6 +186,14 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+
+  void _goToDashboard(BuildContext context, String username) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => Dashboard(admin: username),
+      ),
+    );
+  }
 }
 
 void _goToCreateAccount(BuildContext context) {
@@ -196,11 +204,4 @@ void _goToCreateAccount(BuildContext context) {
   );
 }
 
-void _goToDashboard(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (BuildContext context) => const Dashboard(),
-    ),
-  );
-}
 

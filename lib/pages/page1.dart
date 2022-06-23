@@ -28,7 +28,7 @@ class _Page1State extends State<Page1> {
           SfCartesianChart(
               primaryXAxis: CategoryAxis(),
               // Chart title
-              title: ChartTitle(text: 'Half yearly sales analysis'),
+              title: ChartTitle(text: 'sondages stats'),
               // Enable legend
               legend: Legend(isVisible: true),
               // Enable tooltip

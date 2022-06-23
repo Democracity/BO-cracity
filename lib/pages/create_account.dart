@@ -11,7 +11,7 @@ class CreateAccount extends StatefulWidget {
 }
 
 Future<User> createAccount(
-    String mail, String username, String password, String role) async {
+    String mail, String username, String password, String role, BuildContext context) async {
   var response = await http.post(Uri.parse('https://democracity-api.herokuapp.com/user'),
       body: {
     "mail": mail,
@@ -25,6 +25,9 @@ Future<User> createAccount(
 
   if (response.statusCode == 200) {
     String responseString = response.body;
+    _goToLogin(context);
+
+
   } else {
     throw Exception('Failed to create album.');
   }
@@ -135,17 +138,17 @@ class _CreateAccountState extends State<CreateAccount> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Votre compte a bien été crée"))
                         );
-                        _goToLogin(context);
                         String mail = mailController.text;
                         String username = usernameController.text;
                         String password = passwordController.text;
                         String role = "1";
 
-                        User data =
-                            await createAccount(mail, username, password, role);
+                        User data = await createAccount(mail, username, password, role, context);
+
 
                         setState(() {
                           _userModel = data;
+
 
                         });
 
