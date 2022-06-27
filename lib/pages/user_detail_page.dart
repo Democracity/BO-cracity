@@ -20,6 +20,13 @@ class _UserDetail extends State<UserDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: ElevatedButton(
+        onPressed: ( ) {
+          ApiServices.addFavorite(widget.username);
+        },
+        child: Text("ajouter aux favoris")
+
+      ),
       body: SafeArea(
         child: FutureBuilder(
           future: ApiServices.getUserDetail(widget.username),
@@ -56,7 +63,12 @@ class _UserDetail extends State<UserDetail> {
             }
           },
         ),
+
       ),
+
+
+
     );
+
   }
 }

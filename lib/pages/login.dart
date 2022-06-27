@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bo_cracity/pages/create_account.dart';
 import 'package:bo_cracity/pages/dashboard.dart';
+import 'package:bo_cracity/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:bo_cracity/pages/create_account.dart';
 import 'package:http/http.dart' as http;
@@ -16,32 +17,9 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-
-Future<bool> login(String username, String password) async {
-  final http.Response response = await http.post(
-    (Uri.parse('https://democracity-api.herokuapp.com/login')),
-    headers: <String, String>{
-      'Content-Type': 'application/json',
-    },
-    body: jsonEncode(<String, String>{
-      'username': username,
-      'password': password
-    }),
-  );
-  var data = response.body;
-  print(data);
-
-  return response.statusCode == 200;
-
-}
-
-
-
 class _LoginState extends State<Login> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -132,12 +110,12 @@ class _LoginState extends State<Login> {
                         String username = usernameController.text;
                         String password = passwordController.text;
                         print("HELLO");
-                        bool data =
-                        await login(username, password);
+                        bool loginStatus =
+                        await ApiServices.login(username, password);
                         print("HELOOOOOOOOO");
                         //print (await login(username, password));
 
-                        if(data){
+                        if(loginStatus){
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Utilisateur connecté"))
                         );

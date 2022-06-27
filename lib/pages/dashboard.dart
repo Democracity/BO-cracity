@@ -20,6 +20,13 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   PageController page = PageController();
 
+  void _updateFavorite() {
+    setState(() {
+      page.jumpToPage(4);
+
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<ChartData> chartData = [
@@ -27,7 +34,6 @@ class _DashboardState extends State<Dashboard> {
       ChartData('IOS', 38, Colors.red),
       ChartData('Flutter', 34, Colors.green.shade900),
     ];
-
 
     List<_SalesData> data = [
       _SalesData('Jan', 35),
@@ -44,34 +50,31 @@ class _DashboardState extends State<Dashboard> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SideMenu(
-
             controller: page,
-            onDisplayModeChanged: (mode) {
-            },
+            onDisplayModeChanged: (mode) {},
             style: SideMenuStyle(
               displayMode: SideMenuDisplayMode.auto,
               hoverColor: Colors.blue[100],
-              backgroundColor: Colors.pinkAccent,
-              selectedColor: Colors.pinkAccent,
-              selectedTitleTextStyle: const TextStyle(color: Colors.white),
+              backgroundColor: Colors.blue,
+              selectedColor: Colors.white,
+              selectedTitleTextStyle: const TextStyle(color: Colors.black),
               selectedIconColor: Colors.black,
               // decoration: BoxDecoration(
               //   borderRadius: BorderRadius.all(Radius.circular(10)),
               // ),
               // backgroundColor: Colors.blueGrey[700]
             ),
-
             footer: const Padding(
               padding: EdgeInsets.all(8.0),
               child: Text(
-                'Bo_cracity',
+                'Back Office',
                 style: TextStyle(fontSize: 15),
               ),
             ),
             items: [
               SideMenuItem(
                 priority: 0,
-                title: 'Dashboard',
+                title: 'Accueil',
                 onTap: () {
                   _goToPage1(context);
                 },
@@ -109,9 +112,20 @@ class _DashboardState extends State<Dashboard> {
                 priority: 4,
                 title: 'Sondages',
                 onTap: () {
-                  page.jumpToPage(4);
+                  _updateFavorite();
                 },
                 icon: const Icon(Icons.stacked_bar_chart),
+              ),
+              SideMenuItem(
+                priority: 5,
+                title: 'Favoris',
+                onTap: (
+
+                    ) {
+
+                  page.jumpToPage(5);
+                },
+                icon: const Icon(Icons.star),
               ),
             ],
           ),
@@ -119,81 +133,39 @@ class _DashboardState extends State<Dashboard> {
             child: PageView(
               controller: page,
               children: [
-              Container(
-              color: Colors.blue,
-              child: const Center(
-                child: Text(
-                  'Dashboard',
-                  style: TextStyle(fontSize: 35),
+                Container(
+                  color: Colors.blue,
+                  child: const Center(
+                    child: Text(
+                      "J'aime trop Flutter",
+                      style: TextStyle(fontSize: 35),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SfCircularChart(
-                legend: Legend(isVisible: true),
-                title: ChartTitle(
-                    text: 'Graphique utilisateurs',
-                    // Aligns the chart title to left
-                    alignment: ChartAlignment.near,
-                    textStyle: const TextStyle(
-                      fontSize: 20,
-                    )
-                ),
-                backgroundColor: Colors.white,
-                series: <CircularSeries>[
-                  // Render pie chart
-                  PieSeries<ChartData, String>(
-                      dataSource: chartData,
-                      pointColorMapper: (ChartData data, _) => data.color,
-                      xValueMapper: (ChartData data, _) => data.x,
-                      yValueMapper: (ChartData data, _) => data.y,
-                      dataLabelSettings: const DataLabelSettings(
-                          isVisible: true)
-                  )
-                ]
-            ),
-            Scaffold(
-              body: SafeArea(
-                child: FutureBuilder(
-                  future: ApiServices.getAndroidUsers(),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    switch (snapshot.connectionState) {
-                      case ConnectionState.waiting:
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                        break;
-                      case ConnectionState.done:
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text("Error: ${snapshot.error}"),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          final List<User> users = snapshot.data;
-                          if (users.isEmpty) {
-                            return const Center(
-                              child: Text("Empty list"),
-                            );
-                          }
-                          return DataTableWidget(users: users);
-                        } else {
-                          return const Center(
-                            child: Text("No data"),
-                          );
-                        }
-                        break;
-                      default:
-                        return Container();
-                        break;
-                    }
-                  },
-                ),
-              ),
-            ),
+                SfCircularChart(
+                    legend: Legend(isVisible: true),
+                    title: ChartTitle(
+                        text: 'Graphique utilisateurs',
+                        // Aligns the chart title to left
+                        alignment: ChartAlignment.near,
+                        textStyle: const TextStyle(
+                          fontSize: 20,
+                        )),
+                    backgroundColor: Colors.white,
+                    series: <CircularSeries>[
+                      // Render pie chart
+                      PieSeries<ChartData, String>(
+                          dataSource: chartData,
+                          pointColorMapper: (ChartData data, _) => data.color,
+                          xValueMapper: (ChartData data, _) => data.x,
+                          yValueMapper: (ChartData data, _) => data.y,
+                          dataLabelSettings:
+                              const DataLabelSettings(isVisible: true))
+                    ]),
                 Scaffold(
                   body: SafeArea(
                     child: FutureBuilder(
-                      future: ApiServices.getiosUsers(),
+                      future: ApiServices.getAndroidUsers(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
@@ -229,52 +201,148 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
-            Scaffold(
-                body: Column(children: [
-                  //Initialize the chart widget
-                  SfCartesianChart(
-                      primaryXAxis: CategoryAxis(),
-                      // Chart title
-                      title: ChartTitle(text: 'sondages stats'),
-                      // Enable legend
-                      legend: Legend(isVisible: true),
-                      // Enable tooltip
-                      tooltipBehavior: TooltipBehavior(enable: true),
-                      series: <ChartSeries<_SalesData, String>>[
-                        LineSeries<_SalesData, String>(
-                            dataSource: data,
-                            xValueMapper: (_SalesData sales, _) => sales.year,
-                            yValueMapper: (_SalesData sales, _) => sales.sales,
-                            name: 'Sales',
-                            // Enable data label
-                            dataLabelSettings: const DataLabelSettings(isVisible: true))
-                      ]),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      //Initialize the spark charts widget
-                      child: SfSparkLineChart.custom(
-                        //Enable the trackball
-                        trackball: const SparkChartTrackball(
-                            activationMode: SparkChartActivationMode.tap),
-                        //Enable marker
-                        marker: const SparkChartMarker(
-                            displayMode: SparkChartMarkerDisplayMode.all),
-                        //Enable data label
-                        labelDisplayMode: SparkChartLabelDisplayMode.all,
-                        xValueMapper: (int index) => data[index].year,
-                        yValueMapper: (int index) => data[index].sales,
-                        dataCount: 5,
-                      ),
+                Scaffold(
+                  body: SafeArea(
+                    child: FutureBuilder(
+                      future: ApiServices.getiosUsers(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const Center(
+
+                              child: CircularProgressIndicator(),
+                            );
+                            break;
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+
+                              return Center(
+                                child: Text("Error: ${snapshot.error}"),
+                              );
+                            }
+                            if (snapshot.hasData) {
+
+                              final List<User> users = snapshot.data;
+                              if (users.isEmpty) {
+                                return const Center(
+                                  child: Text("Empty list"),
+                                );
+                              }
+
+                              return DataTableWidget(users: users);
+
+
+                            } else {
+                              return const Center(
+                                child: Text("No data"),
+                              );
+                            }
+
+                            break;
+                          default:
+                            return Container();
+                            break;
+                        }
+
+                      },
+
+
                     ),
-                  )
-                ]))
+                  ),
+
+                ),
+                Scaffold(
+                  body: Column(
+                    children: [
+                      //Initialize the chart widget
+                      SfCartesianChart(
+                          primaryXAxis: CategoryAxis(),
+                          // Chart title
+                          title: ChartTitle(text: 'sondages stats'),
+                          // Enable legend
+                          legend: Legend(isVisible: true),
+                          // Enable tooltip
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                          series: <ChartSeries<_SalesData, String>>[
+                            LineSeries<_SalesData, String>(
+                                dataSource: data,
+                                xValueMapper: (_SalesData sales, _) =>
+                                    sales.year,
+                                yValueMapper: (_SalesData sales, _) =>
+                                    sales.sales,
+                                name: 'Sales',
+                                // Enable data label
+                                dataLabelSettings:
+                                    const DataLabelSettings(isVisible: true))
+                          ]),
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          //Initialize the spark charts widget
+                          child: SfSparkLineChart.custom(
+                            //Enable the trackball
+                            trackball: const SparkChartTrackball(
+                                activationMode: SparkChartActivationMode.tap),
+                            //Enable marker
+                            marker: const SparkChartMarker(
+                                displayMode: SparkChartMarkerDisplayMode.all),
+                            //Enable data label
+                            labelDisplayMode: SparkChartLabelDisplayMode.all,
+                            xValueMapper: (int index) => data[index].year,
+                            yValueMapper: (int index) => data[index].sales,
+                            dataCount: 5,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Scaffold(
+                  body: SafeArea(
+                    child: FutureBuilder(
+                      future: ApiServices.getFavorites(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                            break;
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text("Error: ${snapshot.error}"),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              final List<User> users = snapshot.data;
+                              if (users.isEmpty) {
+                                return const Center(
+                                  child: Text("Empty list"),
+                                );
+                              }
+
+                              return DataTableWidget(users: users);
+                            } else {
+                              return const Center(
+                                child: Text("No data"),
+                              );
+                            }
+                            break;
+                          default:
+                            return Container();
+                            break;
+                        }
+                      },
+
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
-    ),]
-    ,
-    )
-    ,
     );
   }
 }
@@ -286,8 +354,6 @@ void _goToPage1(BuildContext context) {
     ),
   );
 }
-
-
 
 class _SalesData {
   _SalesData(this.year, this.sales);

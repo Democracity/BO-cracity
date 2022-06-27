@@ -25,7 +25,6 @@ Future<User> createAccount(
 
   if (response.statusCode == 200) {
     String responseString = response.body;
-    _goToLogin(context);
 
 
   } else {
@@ -142,7 +141,6 @@ class _CreateAccountState extends State<CreateAccount> {
                         String username = usernameController.text;
                         String password = passwordController.text;
                         String role = "1";
-
                         User data = await createAccount(mail, username, password, role, context);
 
 

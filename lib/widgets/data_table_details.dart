@@ -25,9 +25,6 @@ class _DataTableDetailsWidget extends State<DataTableDetailsWidget> {
         DataColumn(label: Text('Favoris')),
 
 
-
-
-
       ], rows: widget.users.map((e) => DataRow(
           cells: [
             DataCell(Text(e.username), onTap: (){
