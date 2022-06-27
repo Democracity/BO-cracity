@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import '../services/User.dart';
+import '../services/user.dart';
 import 'login.dart';
 
 class CreateAccount extends StatefulWidget {
@@ -10,24 +10,27 @@ class CreateAccount extends StatefulWidget {
   State<CreateAccount> createState() => _CreateAccountState();
 }
 
-Future<User?> createAccount(
-    String mail, String username, String password, String role) async {
-  var response = await http.post(Uri.http('localhost:3000', 'user'), body: {
+Future<User> createAccount(
+    String mail, String username, String password, String role, BuildContext context) async {
+  var response = await http.post(Uri.parse('https://democracity-api.herokuapp.com/user'),
+      body: {
     "mail": mail,
     "username": username,
     "password": password,
     "role": role,
   });
   var data = response.body;
+  print("OKKKKK");
   print(data);
 
   if (response.statusCode == 200) {
     String responseString = response.body;
-    userFromJson(responseString);
+
+
   } else {
-    return null;
+    throw Exception('Failed to create album.');
   }
-  return null;
+  throw Exception('Failed to create album.');
 }
 
 class _CreateAccountState extends State<CreateAccount> {
@@ -134,17 +137,16 @@ class _CreateAccountState extends State<CreateAccount> {
                         ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(content: Text("Votre compte a bien été crée"))
                         );
-                        _goToLogin(context);
                         String mail = mailController.text;
                         String username = usernameController.text;
                         String password = passwordController.text;
-                        String role = "2";
+                        String role = "1";
+                        User data = await createAccount(mail, username, password, role, context);
 
-                        User? data =
-                            await createAccount(mail, username, password, role);
 
                         setState(() {
-                          _userModel = data!;
+                          _userModel = data;
+
 
                         });
 

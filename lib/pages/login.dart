@@ -1,10 +1,25 @@
+import 'dart:convert';
+
 import 'package:bo_cracity/pages/create_account.dart';
 import 'package:bo_cracity/pages/dashboard.dart';
+import 'package:bo_cracity/services/api_services.dart';
 import 'package:flutter/material.dart';
 import 'package:bo_cracity/pages/create_account.dart';
+import 'package:http/http.dart' as http;
 
-class Login extends StatelessWidget {
+import '../services/user.dart';
+
+
+class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
+
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -36,13 +51,15 @@ class Login extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Email',
                             icon: Icon(Icons.email_outlined)),
+                        controller: usernameController,
+
                       ),
                     ),
                   ),
@@ -57,13 +74,15 @@ class Login extends StatelessWidget {
                       color: Colors.black.withAlpha(40),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(left: 8.0),
+                    child:  Padding(
+                      padding: const EdgeInsets.only(left: 8.0),
                       child: TextField(
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
                             icon: Icon(Icons.lock_open)),
+                        controller: passwordController,
+
                       ),
                     ),
                   ),
@@ -87,7 +106,26 @@ class Login extends StatelessWidget {
                     decoration: const BoxDecoration(color: Colors.pink),
                     child: ElevatedButton(
                       onPressed: () async {
-                        _goToDashboard(context);
+
+                        String username = usernameController.text;
+                        String password = passwordController.text;
+                        print("HELLO");
+                        bool loginStatus =
+                        await ApiServices.login(username, password);
+                        print("HELOOOOOOOOO");
+                        //print (await login(username, password));
+
+                        if(loginStatus){
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Utilisateur connecté"))
+                        );
+                         _goToDashboard(context, username);
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(content: Text("Utilisateur non connecté"))
+                          );
+                        }
+
                       },
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 4),
@@ -126,6 +164,14 @@ class Login extends StatelessWidget {
       ),
     );
   }
+
+  void _goToDashboard(BuildContext context, String username) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (BuildContext context) => Dashboard(admin: username),
+      ),
+    );
+  }
 }
 
 void _goToCreateAccount(BuildContext context) {
@@ -136,11 +182,4 @@ void _goToCreateAccount(BuildContext context) {
   );
 }
 
-void _goToDashboard(BuildContext context) {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (BuildContext context) => const Dashboard(),
-    ),
-  );
-}
 
