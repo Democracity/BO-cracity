@@ -23,7 +23,6 @@ class _DashboardState extends State<Dashboard> {
   void _updateFavorite() {
     setState(() {
       page.jumpToPage(4);
-
     });
   }
 
@@ -43,9 +42,6 @@ class _DashboardState extends State<Dashboard> {
       _SalesData('May', 40)
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.admin),
-      ),
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -54,8 +50,8 @@ class _DashboardState extends State<Dashboard> {
             onDisplayModeChanged: (mode) {},
             style: SideMenuStyle(
               displayMode: SideMenuDisplayMode.auto,
-              hoverColor: Colors.blue[100],
-              backgroundColor: Colors.blue,
+              hoverColor: Colors.white70,
+              backgroundColor: Colors.grey,
               selectedColor: Colors.white,
               selectedTitleTextStyle: const TextStyle(color: Colors.black),
               selectedIconColor: Colors.black,
@@ -93,20 +89,19 @@ class _DashboardState extends State<Dashboard> {
                 icon: const Icon(Icons.supervisor_account),
               ),
               SideMenuItem(
-                priority: 2,
-                title: 'Utilisateurs IOS',
-                onTap: () {
-                  page.jumpToPage(2);
-                },
-                icon: const Icon(Icons.account_circle_rounded),
-              ),
+                  priority: 2,
+                  title: 'Utilisateurs IOS',
+                  onTap: () {
+                    page.jumpToPage(2);
+                  },
+                  icon: const Icon(Icons.phone_iphone)),
               SideMenuItem(
                 priority: 3,
                 title: 'Utilisateurs Android',
                 onTap: () {
                   page.jumpToPage(3);
                 },
-                icon: const Icon(Icons.android_outlined),
+                icon: const Icon(Icons.phone_android),
               ),
               SideMenuItem(
                 priority: 4,
@@ -119,10 +114,7 @@ class _DashboardState extends State<Dashboard> {
               SideMenuItem(
                 priority: 5,
                 title: 'Favoris',
-                onTap: (
-
-                    ) {
-
+                onTap: () {
                   page.jumpToPage(5);
                 },
                 icon: const Icon(Icons.star),
@@ -134,12 +126,27 @@ class _DashboardState extends State<Dashboard> {
               controller: page,
               children: [
                 Container(
-                  color: Colors.blue,
-                  child: const Center(
-                    child: Text(
-                      "J'aime trop Flutter",
-                      style: TextStyle(fontSize: 35),
-                    ),
+                  color: Colors.white70,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Image.asset('assets/images/logo.jpg',
+                            height: 200,
+                            scale: 2.5,
+                            // color: Color.fromARGB(255, 15, 147, 59),
+                            opacity: const AlwaysStoppedAnimation<double>(0.5)),
+                      ),
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            'Democracity',
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),],
                   ),
                 ),
                 SfCircularChart(
@@ -209,19 +216,16 @@ class _DashboardState extends State<Dashboard> {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
                             return const Center(
-
                               child: CircularProgressIndicator(),
                             );
                             break;
                           case ConnectionState.done:
                             if (snapshot.hasError) {
-
                               return Center(
                                 child: Text("Error: ${snapshot.error}"),
                               );
                             }
                             if (snapshot.hasData) {
-
                               final List<User> users = snapshot.data;
                               if (users.isEmpty) {
                                 return const Center(
@@ -230,8 +234,6 @@ class _DashboardState extends State<Dashboard> {
                               }
 
                               return DataTableWidget(users: users);
-
-
                             } else {
                               return const Center(
                                 child: Text("No data"),
@@ -243,13 +245,9 @@ class _DashboardState extends State<Dashboard> {
                             return Container();
                             break;
                         }
-
                       },
-
-
                     ),
                   ),
-
                 ),
                 Scaffold(
                   body: Column(
@@ -334,7 +332,6 @@ class _DashboardState extends State<Dashboard> {
                             break;
                         }
                       },
-
                     ),
                   ),
                 ),

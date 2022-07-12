@@ -44,13 +44,13 @@ class _CreateAccountState extends State<CreateAccount> {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.pinkAccent, Colors.purpleAccent.shade700])),
+              colors: [Colors.grey, Colors.grey])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(50),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
             height: 400,
@@ -131,11 +131,11 @@ class _CreateAccountState extends State<CreateAccount> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
-                    decoration: const BoxDecoration(color: Colors.pink),
+                    decoration: const BoxDecoration(color: Colors.blueGrey),
                     child: ElevatedButton(
                       onPressed: () async {
                         ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Votre compte a bien été crée"))
+                            const SnackBar(content: Text("Account created"))
                         );
                         String mail = mailController.text;
                         String username = usernameController.text;
@@ -161,13 +161,25 @@ class _CreateAccountState extends State<CreateAccount> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink,
+                        primary: Colors.blueGrey,
                       ),
                     ),
                   ),
                 ),
                 const SizedBox(
                   height: 40,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(""),
+                      GestureDetector(
+                          onTap: () => _goToLogin(context),
+                          child: const Text("Already have an account ? login here")),
+                    ],
+                  ),
                 ),
               ],
             ),
