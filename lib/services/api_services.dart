@@ -23,6 +23,22 @@ class ApiServices {
   }
 
 
+  static Future<List<User>> getUsers() async {
+    final response = await http.get(
+      Uri.parse("https://democracity-api.herokuapp.com/users"),
+    );
+    if (response.statusCode != 200) {
+      throw Error();
+    }
+    final jsonBody = json.decode(response.body);
+    //print(jsonBody);
+    final List<User> users = (jsonBody as List).map((user) =>
+        User.fromJson(user)).toList();
+
+    return users;
+  }
+
+
   static Future<List<User>> getAndroidUsers() async {
     final response = await http.get(
       Uri.parse("https://democracity-api.herokuapp.com/iosusers"),
@@ -107,6 +123,19 @@ class ApiServices {
   static Future<bool> addFavorite(String username) async {
     final http.Response response = await http.put(
       (Uri.parse('https://democracity-api.herokuapp.com/favorite/$username')),
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+      },
+    );
+    var data = response.body;
+    print(data);
+
+    return response.statusCode == 200;
+  }
+
+  static Future<bool> banUser(String username) async {
+    final http.Response response = await http.put(
+      (Uri.parse('https://democracity-api.herokuapp.com/banuser/$username')),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },

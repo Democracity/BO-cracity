@@ -127,6 +127,17 @@ class _DashboardState extends State<Dashboard> {
                 },
                 icon: const Icon(Icons.star),
               ),
+              SideMenuItem(
+                priority: 6,
+                title: 'Moderation',
+                onTap: (
+
+                    ) {
+
+                  page.jumpToPage(6);
+                },
+                icon: const Icon(Icons.star),
+              ),
             ],
           ),
           Expanded(
@@ -338,6 +349,50 @@ class _DashboardState extends State<Dashboard> {
                     ),
                   ),
                 ),
+
+                Scaffold(
+                  body: SafeArea(
+                    child: FutureBuilder(
+                      future: ApiServices.getUsers(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                            break;
+                          case ConnectionState.done:
+                            if (snapshot.hasError) {
+                              return Center(
+                                child: Text("Error: ${snapshot.error}"),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              final List<User> users = snapshot.data;
+                              if (users.isEmpty) {
+                                return const Center(
+                                  child: Text("Empty list"),
+                                );
+                              }
+
+                              return DataTableWidget(users: users);
+                            } else {
+                              return const Center(
+                                child: Text("No data"),
+                              );
+                            }
+                            break;
+                          default:
+                            return Container();
+                            break;
+                        }
+                      },
+
+                    ),
+                  ),
+                ),
+
+
               ],
             ),
           ),

@@ -24,7 +24,7 @@ class UserD {
   String mail;
   int role;
   List? sondageansweredid;
-  int id;
+  int? id;
   bool favorite;
 
   factory UserD.fromJson(Map<String, dynamic> json) => UserD(
@@ -33,7 +33,7 @@ class UserD {
     mail: json["mail"] as String,
     role: json["role"] as int,
     sondageansweredid: json["sondageansweredid"] as List?,
-    id: json["Id"] as int,
+    id: json["id"] as int?,
     favorite: json ["favorite"] as bool,
 
   );
@@ -44,7 +44,7 @@ class UserD {
     "mail": mail,
     "role": role,
     "sondageansweredid": sondageansweredid,
-    "Id": id,
+    "id": id,
     "favorite": favorite,
   };
 }

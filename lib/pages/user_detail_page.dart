@@ -16,16 +16,43 @@ class UserDetail extends StatefulWidget {
 }
 
 class _UserDetail extends State<UserDetail> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: ElevatedButton(
-        onPressed: ( ) {
-          ApiServices.addFavorite(widget.username);
-        },
-        child: Text("ajouter aux favoris")
+      floatingActionButton: Wrap(
+        direction: Axis.vertical,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+                onPressed: () {
+                  ApiServices.addFavorite(widget.username);
+                },
+                child: Text("ajouter aux favoris")),
+          ),
 
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                          side: BorderSide(color: Colors.red)
+                      )
+                  )
+              ),
+              onPressed: () {
+                ApiServices.banUser(widget.username);
+
+                //action code for button 2
+              },
+              child: Text("Bannir l'utilisateur"),
+            ),
+          ),
+        ],
       ),
       body: SafeArea(
         child: FutureBuilder(
@@ -63,12 +90,7 @@ class _UserDetail extends State<UserDetail> {
             }
           },
         ),
-
       ),
-
-
-
     );
-
   }
 }
