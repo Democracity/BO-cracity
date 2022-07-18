@@ -26,13 +26,13 @@ class _LoginState extends State<Login> {
     return Container(
       decoration: BoxDecoration(
           gradient: LinearGradient(
-              colors: [Colors.pinkAccent, Colors.purpleAccent.shade700])),
+              colors: [Colors.grey, Colors.grey])),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         body: Center(
           child: Container(
             decoration: BoxDecoration(
-              color: Colors.white.withAlpha(50),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
             height: 400,
@@ -40,7 +40,7 @@ class _LoginState extends State<Login> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text("LOGIN"),
+                const Text("LOGIN",style: TextStyle(fontSize: 30)),
                 const SizedBox(
                   height: 20,
                 ),
@@ -56,8 +56,8 @@ class _LoginState extends State<Login> {
                       child: TextField(
                         decoration: const InputDecoration(
                             border: InputBorder.none,
-                            hintText: 'Email',
-                            icon: Icon(Icons.email_outlined)),
+                            hintText: 'Username',
+                            icon: Icon(Icons.account_circle_outlined)),
                         controller: usernameController,
 
                       ),
@@ -77,12 +77,14 @@ class _LoginState extends State<Login> {
                     child:  Padding(
                       padding: const EdgeInsets.only(left: 8.0),
                       child: TextField(
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
                         decoration: const InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Password',
                             icon: Icon(Icons.lock_open)),
                         controller: passwordController,
-
                       ),
                     ),
                   ),
@@ -103,28 +105,24 @@ class _LoginState extends State<Login> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Container(
-                    decoration: const BoxDecoration(color: Colors.pink),
+                    decoration: const BoxDecoration(color: Colors.blueGrey),
                     child: ElevatedButton(
                       onPressed: () async {
 
                         String username = usernameController.text;
                         String password = passwordController.text;
-                        print("HELLO");
-                        bool loginStatus =
-                        await ApiServices.login(username, password);
-                        print("HELOOOOOOOOO");
+                        print("connection");
+                        //bool loginStatus =
+                        //await ApiServices.login(username, password);
                         //print (await login(username, password));
 
-                        if(loginStatus){
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text("Utilisateur connecté"))
-                        );
+                        //if(loginStatus){
                          _goToDashboard(context, username);
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Utilisateur non connecté"))
-                          );
-                        }
+                        //} else {
+                         // ScaffoldMessenger.of(context).showSnackBar(
+                        //      const SnackBar(content: Text("Wrong username or password"))
+                          //);
+                       // }
 
                       },
                       child: Padding(
@@ -137,7 +135,7 @@ class _LoginState extends State<Login> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.pink
+                          primary: Colors.blueGrey
                       ),
                     ),
                   ),
