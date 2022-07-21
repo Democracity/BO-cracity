@@ -368,6 +368,7 @@ class _DashboardState extends State<Dashboard> {
                               width: 100,
                               onTap: () => {
                               },
+
                               color: Theme.of(context).primaryColor,
                             ),
                             flex: 1,
