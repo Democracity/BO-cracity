@@ -1,4 +1,6 @@
 import 'package:bo_cracity/pages/page1.dart';
+import 'package:bo_cracity/services/sondage.dart';
+import 'package:bo_cracity/widgets/data_sondage_table.dart';
 import 'package:easy_sidemenu/easy_sidemenu.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -6,6 +8,7 @@ import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 import '../services/user.dart';
 import '../services/api_services.dart';
+import '../widget/button.dart';
 import '../widgets/data_table.dart';
 import '../widgets/user_item.dart';
 
@@ -35,6 +38,8 @@ class _DashboardState extends State<Dashboard> {
       ChartData('Flutter', 34, Colors.green.shade900),
     ];
 
+
+
     List<_SalesData> data = [
       _SalesData('Jan', 35),
       _SalesData('Feb', 28),
@@ -43,9 +48,7 @@ class _DashboardState extends State<Dashboard> {
       _SalesData('May', 40)
     ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.admin),
-      ),
+
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -59,10 +62,6 @@ class _DashboardState extends State<Dashboard> {
               selectedColor: Colors.white,
               selectedTitleTextStyle: const TextStyle(color: Colors.black),
               selectedIconColor: Colors.black,
-              // decoration: BoxDecoration(
-              //   borderRadius: BorderRadius.all(Radius.circular(10)),
-              // ),
-              // backgroundColor: Colors.blueGrey[700]
             ),
             footer: const Padding(
               padding: EdgeInsets.all(8.0),
@@ -92,24 +91,9 @@ class _DashboardState extends State<Dashboard> {
                 },
                 icon: const Icon(Icons.supervisor_account),
               ),
+
               SideMenuItem(
                 priority: 2,
-                title: 'Utilisateurs IOS',
-                onTap: () {
-                  page.jumpToPage(2);
-                },
-                icon: const Icon(Icons.account_circle_rounded),
-              ),
-              SideMenuItem(
-                priority: 3,
-                title: 'Utilisateurs Android',
-                onTap: () {
-                  page.jumpToPage(3);
-                },
-                icon: const Icon(Icons.android_outlined),
-              ),
-              SideMenuItem(
-                priority: 4,
                 title: 'Sondages',
                 onTap: () {
                   _updateFavorite();
@@ -117,24 +101,36 @@ class _DashboardState extends State<Dashboard> {
                 icon: const Icon(Icons.stacked_bar_chart),
               ),
               SideMenuItem(
-                priority: 5,
-                title: 'Favoris',
-                onTap: (
-
-                    ) {
-
-                  page.jumpToPage(5);
-                },
-                icon: const Icon(Icons.star),
-              ),
-              SideMenuItem(
-                priority: 6,
+                priority: 3,
                 title: 'Moderation',
                 onTap: (
 
                     ) {
 
-                  page.jumpToPage(6);
+                  page.jumpToPage(3);
+                },
+                icon: const Icon(Icons.star),
+              ),
+              SideMenuItem(
+                priority: 4,
+                title: 'Test',
+                onTap: (
+
+                    ) {
+
+                  page.jumpToPage(4);
+                },
+                icon: const Icon(Icons.star),
+              ),
+
+              SideMenuItem(
+                priority: 5,
+                title: 'Sondages',
+                onTap: (
+
+                    ) {
+
+                  page.jumpToPage(5);
                 },
                 icon: const Icon(Icons.star),
               ),
@@ -148,7 +144,7 @@ class _DashboardState extends State<Dashboard> {
                   color: Colors.blue,
                   child: const Center(
                     child: Text(
-                      "J'aime trop Flutter",
+                      "Bienvenue",
                       style: TextStyle(fontSize: 35),
                     ),
                   ),
@@ -215,7 +211,7 @@ class _DashboardState extends State<Dashboard> {
                 Scaffold(
                   body: SafeArea(
                     child: FutureBuilder(
-                      future: ApiServices.getiosUsers(),
+                      future: ApiServices.getUsers(),
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         switch (snapshot.connectionState) {
                           case ConnectionState.waiting:
@@ -232,23 +228,18 @@ class _DashboardState extends State<Dashboard> {
                               );
                             }
                             if (snapshot.hasData) {
-
                               final List<User> users = snapshot.data;
                               if (users.isEmpty) {
                                 return const Center(
                                   child: Text("Empty list"),
                                 );
                               }
-
                               return DataTableWidget(users: users);
-
-
                             } else {
                               return const Center(
                                 child: Text("No data"),
                               );
                             }
-
                             break;
                           default:
                             return Container();
@@ -262,6 +253,182 @@ class _DashboardState extends State<Dashboard> {
                   ),
 
                 ),
+                MaterialApp(
+                  home: Scaffold( //AppBar
+                    //Padding is the parent widget in the app body
+                    body: Padding(
+                      padding: const EdgeInsets.all(50),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                                child: Text(
+                                  "Gestion Utilisateurs",
+                                  style: Theme.of(context).textTheme.headline1,
+                                ),
+                                width: double.infinity,
+                              ),
+                              flex: 1,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Expanded(
+
+                        child: SafeArea(
+                          child: FutureBuilder(
+                            future: ApiServices.getUsers(),
+                            builder: (BuildContext context, AsyncSnapshot snapshot) {
+                              switch (snapshot.connectionState) {
+                                case ConnectionState.waiting:
+                                  return const Center(
+
+                                    child: CircularProgressIndicator(),
+                                  );
+                                  break;
+                                case ConnectionState.done:
+                                  if (snapshot.hasError) {
+
+                                    return Center(
+                                      child: Text("Error: ${snapshot.error}"),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    final List<User> users = snapshot.data;
+                                    if (users.isEmpty) {
+                                      return const Center(
+                                        child: Text("Empty list"),
+                                      );
+                                    }
+                                    return DataTableWidget(users: users);
+                                  } else {
+                                    return const Center(
+                                      child: Text("No data"),
+                                    );
+                                  }
+                                  break;
+                                default:
+                                  return Container();
+                                  break;
+                              }
+                            },
+                          ),
+                        ),
+                              flex: 7
+                        ),
+                        ],
+                      ), //Container
+                    ), //Padding
+                  ), //Scaffold
+                ),
+
+
+
+
+
+                MaterialApp(
+                  home: Scaffold( //AppBar
+                    //Padding is the parent widget in the app body
+                    body: Padding(
+                      padding: const EdgeInsets.all(50),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                              child: Text(
+                                "Gestion Sondages",
+                                style: Theme.of(context).textTheme.headline1,
+                              ),
+                              width: double.infinity,
+                            ),
+                            flex: 1,
+                          ),
+                          Expanded(
+                            child: Button(
+                              "Filtres",
+                              height: 5,
+                              width: 100,
+                              onTap: () => {
+                              },
+                              color: Theme.of(context).primaryColor,
+                            ),
+                            flex: 1,
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                              child: SafeArea(
+                                child: FutureBuilder(
+                                  future: ApiServices.getSondages(),
+                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return const Center(
+
+                                          child: CircularProgressIndicator(),
+                                        );
+                                        break;
+                                      case ConnectionState.done:
+                                        if (snapshot.hasError) {
+
+                                          return Center(
+                                            child: Text("Error: ${snapshot.error}"),
+                                          );
+                                        }
+                                        if (snapshot.hasData) {
+                                          final List<Sondage> sondages = snapshot.data;
+                                          if (sondages.isEmpty) {
+                                            return const Center(
+                                              child: Text("Empty list"),
+                                            );
+                                          }
+                                          return DataSondageTableWidget(sondages: sondages);
+                                        } else {
+                                          return const Center(
+                                            child: Text("No data"),
+                                          );
+                                        }
+                                        break;
+                                      default:
+                                        return Container();
+                                        break;
+                                    }
+                                  },
+                                ),
+                              ),
+                              flex: 7
+                          ),
+                        ],
+                      ), //Container
+                    ), //Padding
+                  ), //Scaffold
+                ),
+
+
+
+
+
+
+
                 Scaffold(
                   body: Column(
                     children: [

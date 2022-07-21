@@ -19,6 +19,9 @@ class _UserDetail extends State<UserDetail> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Détail de l'utilisteur"),
+      ),
       floatingActionButton: Wrap(
         direction: Axis.vertical,
         children: <Widget>[
@@ -50,6 +53,27 @@ class _UserDetail extends State<UserDetail> {
                 //action code for button 2
               },
               child: Text("Bannir l'utilisateur"),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: ElevatedButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.orangeAccent),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                          side: BorderSide(color: Colors.orangeAccent)
+                      )
+                  )
+              ),
+              onPressed: () {
+                ApiServices.unbanUser(widget.username);
+
+                //action code for button 2
+              },
+              child: Text("Débannir l'utilisateur"),
             ),
           ),
         ],

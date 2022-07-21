@@ -5,15 +5,15 @@ import '../services/api_services.dart';
 import '../services/api_services.dart';
 import '../services/user.dart';
 
-class DataTableWidget extends StatefulWidget {
-  const DataTableWidget({Key? key, required this.users}) : super(key: key);
-  final List<dynamic> users;
+class DataSondageTableWidget extends StatefulWidget {
+  const DataSondageTableWidget({Key? key, required this.sondages}) : super(key: key);
+  final List<dynamic> sondages;
 
   @override
-  State<DataTableWidget> createState() => _DataTableWidget();
+  State<DataSondageTableWidget> createState() => _DataSondageTableWidget();
 }
 
-class _DataTableWidget extends State<DataTableWidget> {
+class _DataSondageTableWidget extends State<DataSondageTableWidget> {
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -31,23 +31,22 @@ class _DataTableWidget extends State<DataTableWidget> {
             ),
             horizontalMargin: 15,
             columns: const [
-              DataColumn(label: Text("Pseudo")),
-              DataColumn(label: Text("Mail")),
-              DataColumn(label: Text("Region")),
-              DataColumn(label: Text("Points")),
+              DataColumn(label: Text("Titre")),
+              DataColumn(label: Text("Nombre de Choix")),
               DataColumn(label: Text("Status")),
+              DataColumn(label: Text("Nombre de signalement")),
             ],
-            rows: widget.users
+            rows: widget.sondages
                 .map((e) => DataRow(
                       cells: [
                         DataCell(
-                          Text(e.username.toString()),
+                          Text(e.title.toString()),
                           onTap: () {
                             print('DataCell onTap');
                           },
                         ),
                         DataCell(
-                          Text(e.mail.toString()),
+                          Text(e.numberchoices.toString()),
                           onTap: () {
                             print('DataCell onTap');
                           },
@@ -55,28 +54,17 @@ class _DataTableWidget extends State<DataTableWidget> {
 
                         DataCell(
                           Text((() {
-                            if (e.region.toString()=="null" || e.region.toString() == "undefined") {
-                              return "Non renseigné";
+                            if (e.private.toString()=="true") {
+                              return "Salle privée";
                             }
-                            return e.region.toString();
+                            return "Sondage Public";
                           })()),
                           onTap: () {
                             print('DataCell onTap');
                           },
                         ),
                         DataCell(
-                          Text(e.points.toString()),
-                          onTap: () {
-                            print('DataCell onTap');
-                          },
-                        ),
-                        DataCell(
-                          Text((() {
-                            if (e.isbanned.toString()=="false") {
-                              return "Actif";
-                            }
-                            return "Bannis";
-                          })()),
+                          Text(e.isreported.toString()),
                           onTap: () {
                             print('DataCell onTap');
                           },

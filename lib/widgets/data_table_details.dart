@@ -23,6 +23,8 @@ class _DataTableDetailsWidget extends State<DataTableDetailsWidget> {
         DataColumn(label: Text('Plateform')),
         DataColumn(label: Text('Sondages Répondus')),
         DataColumn(label: Text('Favoris')),
+        DataColumn(label: Text('Bannis')),
+
 
 
       ], rows: widget.users.map((e) => DataRow(
@@ -45,6 +47,9 @@ class _DataTableDetailsWidget extends State<DataTableDetailsWidget> {
               print('DataCell onTap');
             },),
             DataCell(Text(e.favorite.toString()), onTap: (){
+              print('DataCell onTap');
+            },),
+            DataCell(Text(e.isbanned.toString()), onTap: (){
               print('DataCell onTap');
             },),
           ],

@@ -16,7 +16,9 @@ class UserD {
     required this.role,
     required this.sondageansweredid,
     required this.id,
-    required this.favorite
+    required this.favorite,
+    required this.isbanned
+
   });
 
   String username;
@@ -26,6 +28,8 @@ class UserD {
   List? sondageansweredid;
   int? id;
   bool favorite;
+  bool isbanned;
+
 
   factory UserD.fromJson(Map<String, dynamic> json) => UserD(
     username: json["username"] as String,
@@ -35,6 +39,8 @@ class UserD {
     sondageansweredid: json["sondageansweredid"] as List?,
     id: json["id"] as int?,
     favorite: json ["favorite"] as bool,
+    isbanned: json ["isbanned"] as bool
+
 
   );
 
@@ -46,5 +52,6 @@ class UserD {
     "sondageansweredid": sondageansweredid,
     "id": id,
     "favorite": favorite,
+    "isbanned": isbanned
   };
 }
