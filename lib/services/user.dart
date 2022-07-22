@@ -22,22 +22,22 @@ class User {
 
   });
 
-  String? username;
-  String? password;
-  String? mail;
+  String username;
+  String password;
+  String mail;
   int role;
-  String? region;
+  String region;
   int points;
   List<dynamic?>? sondageansweredid;
   String? lastsondagecreated;
   bool isbanned;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
-    username: json["username"] as String?,
-    password: json["password"] as String?,
-    mail: json["mail"] as String?,
+    username: json["username"] as String,
+    password: json["password"] as String,
+    mail: json["mail"] as String,
     role: json["role"] as int,
-    region: json["region"] as String?,
+    region: json["region"] as String,
     points: json["points"] as int,
     sondageansweredid: json["sondageansweredid"] as List<dynamic?>?,
     lastsondagecreated: json["lastsondagecreated"] as String?,

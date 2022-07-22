@@ -26,19 +26,16 @@ class _DashboardState extends State<Dashboard> {
   void _updateFavorite() {
     setState(() {
       page.jumpToPage(4);
-
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final List<ChartData> chartData = [
-      ChartData('Android', 25, Colors.blue.shade700),
+      ChartData('Android', 25, Colors.purple),
       ChartData('IOS', 38, Colors.red),
       ChartData('Flutter', 34, Colors.green.shade900),
     ];
-
-
 
     List<_SalesData> data = [
       _SalesData('Jan', 35),
@@ -48,20 +45,27 @@ class _DashboardState extends State<Dashboard> {
       _SalesData('May', 40)
     ];
     return Scaffold(
-
       body: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           SideMenu(
+            title: const Padding(
+              padding: EdgeInsets.all(10.0),
+              child: Icon(
+                Icons.account_balance_sharp,
+                color: Colors.purple,
+                size: 200,
+              ),
+            ),
             controller: page,
             onDisplayModeChanged: (mode) {},
             style: SideMenuStyle(
               displayMode: SideMenuDisplayMode.auto,
               hoverColor: Colors.blue[100],
-              backgroundColor: Colors.blue,
-              selectedColor: Colors.white,
-              selectedTitleTextStyle: const TextStyle(color: Colors.black),
-              selectedIconColor: Colors.black,
+              backgroundColor: Colors.white,
+              selectedColor: Colors.purple,
+              selectedTitleTextStyle: const TextStyle(color: Colors.white),
+              selectedIconColor: Colors.white,
             ),
             footer: const Padding(
               padding: EdgeInsets.all(8.0),
@@ -75,7 +79,7 @@ class _DashboardState extends State<Dashboard> {
                 priority: 0,
                 title: 'Accueil',
                 onTap: () {
-                  _goToPage1(context);
+                  page.jumpToPage(0);
                 },
                 icon: const Icon(Icons.home),
                 badgeContent: const Text(
@@ -91,49 +95,23 @@ class _DashboardState extends State<Dashboard> {
                 },
                 icon: const Icon(Icons.supervisor_account),
               ),
-
               SideMenuItem(
                 priority: 2,
-                title: 'Sondages',
+                title: 'Utilisateurs',
                 onTap: () {
-                  _updateFavorite();
+                  page.jumpToPage(2);
                 },
                 icon: const Icon(Icons.stacked_bar_chart),
               ),
               SideMenuItem(
                 priority: 3,
-                title: 'Moderation',
-                onTap: (
-
-                    ) {
-
+                title: 'Sondages',
+                onTap: () {
                   page.jumpToPage(3);
                 },
                 icon: const Icon(Icons.star),
               ),
-              SideMenuItem(
-                priority: 4,
-                title: 'Test',
-                onTap: (
 
-                    ) {
-
-                  page.jumpToPage(4);
-                },
-                icon: const Icon(Icons.star),
-              ),
-
-              SideMenuItem(
-                priority: 5,
-                title: 'Sondages',
-                onTap: (
-
-                    ) {
-
-                  page.jumpToPage(5);
-                },
-                icon: const Icon(Icons.star),
-              ),
             ],
           ),
           Expanded(
@@ -169,174 +147,86 @@ class _DashboardState extends State<Dashboard> {
                           dataLabelSettings:
                               const DataLabelSettings(isVisible: true))
                     ]),
-                Scaffold(
-                  body: SafeArea(
-                    child: FutureBuilder(
-                      future: ApiServices.getAndroidUsers(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                            break;
-                          case ConnectionState.done:
-                            if (snapshot.hasError) {
-                              return Center(
-                                child: Text("Error: ${snapshot.error}"),
-                              );
-                            }
-                            if (snapshot.hasData) {
-                              final List<User> users = snapshot.data;
-                              if (users.isEmpty) {
-                                return const Center(
-                                  child: Text("Empty list"),
-                                );
-                              }
-                              return DataTableWidget(users: users);
-                            } else {
-                              return const Center(
-                                child: Text("No data"),
-                              );
-                            }
-                            break;
-                          default:
-                            return Container();
-                            break;
-                        }
-                      },
-                    ),
-                  ),
-                ),
-                Scaffold(
-                  body: SafeArea(
-                    child: FutureBuilder(
-                      future: ApiServices.getUsers(),
-                      builder: (BuildContext context, AsyncSnapshot snapshot) {
-                        switch (snapshot.connectionState) {
-                          case ConnectionState.waiting:
-                            return const Center(
-
-                              child: CircularProgressIndicator(),
-                            );
-                            break;
-                          case ConnectionState.done:
-                            if (snapshot.hasError) {
-
-                              return Center(
-                                child: Text("Error: ${snapshot.error}"),
-                              );
-                            }
-                            if (snapshot.hasData) {
-                              final List<User> users = snapshot.data;
-                              if (users.isEmpty) {
-                                return const Center(
-                                  child: Text("Empty list"),
-                                );
-                              }
-                              return DataTableWidget(users: users);
-                            } else {
-                              return const Center(
-                                child: Text("No data"),
-                              );
-                            }
-                            break;
-                          default:
-                            return Container();
-                            break;
-                        }
-
-                      },
 
 
-                    ),
-                  ),
-
-                ),
-                MaterialApp(
-                  home: Scaffold( //AppBar
+                 Scaffold(
+                    //AppBar
                     //Padding is the parent widget in the app body
                     body: Padding(
                       padding: const EdgeInsets.all(50),
                       child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Expanded(
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Colors.grey,
-                                    ),
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: const BoxDecoration(
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Colors.grey,
                                   ),
                                 ),
-                                child: Text(
-                                  "Gestion Utilisateurs",
-                                  style: Theme.of(context).textTheme.headline1,
-                                ),
-                                width: double.infinity,
                               ),
-                              flex: 1,
+                              child: Text(
+                                "Gestion Utilisateurs",
+                                style: Theme.of(context).textTheme.headline1,
+                              ),
+                              width: double.infinity,
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Expanded(
-
-                        child: SafeArea(
-                          child: FutureBuilder(
-                            future: ApiServices.getUsers(),
-                            builder: (BuildContext context, AsyncSnapshot snapshot) {
-                              switch (snapshot.connectionState) {
-                                case ConnectionState.waiting:
-                                  return const Center(
-
-                                    child: CircularProgressIndicator(),
-                                  );
-                                  break;
-                                case ConnectionState.done:
-                                  if (snapshot.hasError) {
-
-                                    return Center(
-                                      child: Text("Error: ${snapshot.error}"),
-                                    );
-                                  }
-                                  if (snapshot.hasData) {
-                                    final List<User> users = snapshot.data;
-                                    if (users.isEmpty) {
-                                      return const Center(
-                                        child: Text("Empty list"),
-                                      );
-                                    }
-                                    return DataTableWidget(users: users);
-                                  } else {
-                                    return const Center(
-                                      child: Text("No data"),
-                                    );
-                                  }
-                                  break;
-                                default:
-                                  return Container();
-                                  break;
-                              }
-                            },
+                            flex: 1,
                           ),
-                        ),
-                              flex: 7
-                        ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                              child: SafeArea(
+                                child: FutureBuilder(
+                                  future: ApiServices.getUsers(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
+                                    switch (snapshot.connectionState) {
+                                      case ConnectionState.waiting:
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                        break;
+                                      case ConnectionState.done:
+                                        if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                                "Error: ${snapshot.error}"),
+                                          );
+                                        }
+                                        if (snapshot.hasData) {
+                                          final List<User> users =
+                                              snapshot.data;
+                                          if (users.isEmpty) {
+                                            return const Center(
+                                              child: Text("Empty list"),
+                                            );
+                                          }
+                                          return DataTableWidget(users: users);
+                                        } else {
+                                          return const Center(
+                                            child: Text("No data"),
+                                          );
+                                        }
+                                        break;
+                                      default:
+                                        return Container();
+                                        break;
+                                    }
+                                  },
+                                ),
+                              ),
+                              flex: 7),
                         ],
                       ), //Container
                     ), //Padding
                   ), //Scaffold
-                ),
 
-
-
-
-
-                MaterialApp(
-                  home: Scaffold( //AppBar
+                   Scaffold(
+                    //AppBar
                     //Padding is the parent widget in the app body
                     body: Padding(
                       padding: const EdgeInsets.all(50),
@@ -361,18 +251,7 @@ class _DashboardState extends State<Dashboard> {
                             ),
                             flex: 1,
                           ),
-                          Expanded(
-                            child: Button(
-                              "Filtres",
-                              height: 5,
-                              width: 100,
-                              onTap: () => {
-                              },
 
-                              color: Theme.of(context).primaryColor,
-                            ),
-                            flex: 1,
-                          ),
                           const SizedBox(
                             height: 10,
                           ),
@@ -380,29 +259,31 @@ class _DashboardState extends State<Dashboard> {
                               child: SafeArea(
                                 child: FutureBuilder(
                                   future: ApiServices.getSondages(),
-                                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot snapshot) {
                                     switch (snapshot.connectionState) {
                                       case ConnectionState.waiting:
                                         return const Center(
-
                                           child: CircularProgressIndicator(),
                                         );
                                         break;
                                       case ConnectionState.done:
                                         if (snapshot.hasError) {
-
                                           return Center(
-                                            child: Text("Error: ${snapshot.error}"),
+                                            child: Text(
+                                                "Error: ${snapshot.error}"),
                                           );
                                         }
                                         if (snapshot.hasData) {
-                                          final List<Sondage> sondages = snapshot.data;
+                                          final List<Sondage> sondages =
+                                              snapshot.data;
                                           if (sondages.isEmpty) {
                                             return const Center(
                                               child: Text("Empty list"),
                                             );
                                           }
-                                          return DataSondageTableWidget(sondages: sondages);
+                                          return DataSondageTableWidget(
+                                              sondages: sondages);
                                         } else {
                                           return const Center(
                                             child: Text("No data"),
@@ -416,19 +297,11 @@ class _DashboardState extends State<Dashboard> {
                                   },
                                 ),
                               ),
-                              flex: 7
-                          ),
+                              flex: 7),
                         ],
                       ), //Container
                     ), //Padding
                   ), //Scaffold
-                ),
-
-
-
-
-
-
 
                 Scaffold(
                   body: Column(
@@ -513,11 +386,9 @@ class _DashboardState extends State<Dashboard> {
                             break;
                         }
                       },
-
                     ),
                   ),
                 ),
-
                 Scaffold(
                   body: SafeArea(
                     child: FutureBuilder(
@@ -555,12 +426,9 @@ class _DashboardState extends State<Dashboard> {
                             break;
                         }
                       },
-
                     ),
                   ),
                 ),
-
-
               ],
             ),
           ),

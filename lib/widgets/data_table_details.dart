@@ -23,7 +23,7 @@ class _DataTableDetailsWidget extends State<DataTableDetailsWidget> {
         DataColumn(label: Text('Plateform')),
         DataColumn(label: Text('Sondages Répondus')),
         DataColumn(label: Text('Favoris')),
-        DataColumn(label: Text('Bannis')),
+        DataColumn(label: Text('Banniss')),
 
 
 
@@ -55,6 +55,9 @@ class _DataTableDetailsWidget extends State<DataTableDetailsWidget> {
           ],
 
       )).toList(),
+        headingRowColor: MaterialStateProperty.all<Color>(
+            Theme.of(context).primaryColor),
+        headingTextStyle: Theme.of(context).textTheme.bodyText2,
       ),
     );
   }

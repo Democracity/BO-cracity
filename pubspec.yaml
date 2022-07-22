@@ -30,6 +30,7 @@ dependencies:
   easy_sidemenu: ^0.3.0
   http: ^0.13.4
   syncfusion_flutter_charts: ^20.1.60+1
+  advanced_datatable: ^0.0.8
   flutter:
     sdk: flutter
 

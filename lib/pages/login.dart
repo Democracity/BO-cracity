@@ -112,17 +112,17 @@ class _LoginState extends State<Login> {
                         String username = usernameController.text;
                         String password = passwordController.text;
                         print("connection");
-                        //bool loginStatus =
-                        //await ApiServices.login(username, password);
+                        bool loginStatus =
+                        await ApiServices.login(username, password);
                         //print (await login(username, password));
 
-                        //if(loginStatus){
+                        if(loginStatus){
                         _goToDashboard(context, username);
-                        //} else {
-                        // ScaffoldMessenger.of(context).showSnackBar(
-                        //      const SnackBar(content: Text("Wrong username or password"))
-                        //);
-                        // }
+                        } else {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                             const SnackBar(content: Text("Wrong username or password"))
+                        );
+                         }
 
                       },
                       child: Padding(

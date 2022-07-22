@@ -68,6 +68,37 @@ class ApiServices {
     return users;
   }
 
+  static Future<List<User>> getUsersByRegion(String region) async {
+    final response = await http.get(
+      Uri.parse("https://democracity-api.herokuapp.com/usersbyregion/$region"),
+    );
+    if (response.statusCode != 200) {
+      throw Error();
+    }
+    final jsonBody = json.decode(response.body);
+    //print(jsonBody);
+    final List<User> users = (jsonBody as List).map((user) =>
+        User.fromJson(user)).toList();
+    //print ("HELLO    $users" );
+    return users;
+  }
+
+
+  static Future<List<User>> getUsersbyStatus(String status) async {
+    final response = await http.get(
+      Uri.parse("https://democracity-api.herokuapp.com/usersbanned/$status"),
+    );
+    if (response.statusCode != 200) {
+      throw Error();
+    }
+    final jsonBody = json.decode(response.body);
+    //print(jsonBody);
+    final List<User> users = (jsonBody as List).map((user) =>
+        User.fromJson(user)).toList();
+    //print ("HELLO    $users" );
+    return users;
+  }
+
 
   static Future<List<UserD>> getUserDetail(String username) async {
     final response = await http.get(
